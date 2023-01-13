@@ -1,11 +1,22 @@
 const express = require("express");
-const app = express();
+const https = require("https");
+const fs = require("fs");
 const port = 3000;
 
+var key = fs.readFileSync(__dirname + "/selfsigned.key");
+var cert = fs.readFileSync(__dirname + "/selfsigned.crt");
+var options = {
+  key: key,
+  cert: cert,
+};
+
+app = express();
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Now using https.. Hello World");
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+var server = https.createServer(options, app);
+
+server.listen(port, () => {
+  console.log("server starting on port : " + port);
 });
