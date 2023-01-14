@@ -16,6 +16,11 @@ app.use(express.static); // serves static assets such as HTML files, images, and
 // cookie middleware
 app.use(cookieParser());
 
+// Routes
+const userRouter = require("./routes/userRoute");
+
+app.use("/api", userRouter);
+
 app.get("/", (req, res) => {
   console.log("req :", req.method, req.httpVersion, req.url);
   res.send("Hello World");
