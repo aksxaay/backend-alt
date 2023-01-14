@@ -11,7 +11,6 @@ require("dotenv").config({
 // regular middleware
 app.use(express.json()); // parses incoming requests with JSON payloads
 app.use(express.urlencoded({ extended: true })); // parses incoming requests with URL-encoded payloads
-app.use(express.static); // serves static assets such as HTML files, images, and so on.
 
 // cookie middleware
 app.use(cookieParser());
@@ -21,10 +20,12 @@ const userRouter = require("./routes/userRoute");
 
 app.use("/api", userRouter);
 
-app.get("/", (req, res) => {
+app.get("/hello-world", (req, res) => {
   console.log("req :", req.method, req.httpVersion, req.url);
   res.send("Hello World");
 });
+
+app.get("/api", userRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on Port ${process.env.PORT}`);
