@@ -35,3 +35,38 @@ exports.signup = async (req, res, next) => {
     console.error(error.message);
   }
 };
+
+exports.login = async (req, res) => {
+  try {
+    const { name, password } = await req.body;
+
+    const user = await prisma.user.findFirst({
+      where: {
+        name,
+      },
+    });
+
+    console.log("user", user);
+
+    if (user) {
+      const match = await bcrypt.compare(password, user.password);
+
+      const accessToken = jwt.sign(
+        JSON.stringify(user),
+        process.env.JWT_SECRET
+      );
+
+      if (match) {
+        res.json({ accessToken });
+      } else {
+        res.json({ message: "Invalid Credentials" });
+      }
+    }
+  } catch (error) {
+    res.json({
+      message: error.message,
+    });
+
+    console.error(error);
+  }
+};
